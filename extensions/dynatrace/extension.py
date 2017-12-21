@@ -153,10 +153,12 @@ class DynatraceInstaller(object):
         envfile    = os.path.join(self._ctx['BUILD_DIR'], '.profile.d', 'dynatrace-env.sh')
         agent_path = None
         manifest_file = os.path.join(self._ctx['BUILD_DIR'], 'dynatrace', 'oneagent', 'manifest.json')
+        agent_version = None
 
         if os.path.isfile(manifest_file):
             manifest = json.load(open(manifest_file))
             process_technology = manifest['technologies'].get('process')
+            agent_version = float(".".join(manifest['version'].split(".")[:2]))
             if process_technology:
                 for entry in process_technology['linux-x86-64']:
                     if entry.get('binarytype') == 'primary':
@@ -170,9 +172,11 @@ class DynatraceInstaller(object):
         # prepending agent path with installer directory
         agent_path = os.path.join(self._ctx['HOME'], 'app', 'dynatrace', 'oneagent', agent_path)
 
-        ld_preload = '\nexport LD_PRELOAD="' + agent_path + '"'
-        host_name  = '\nexport DT_HOST_ID=' + app_name + '_${CF_INSTANCE_INDEX}'
         with open(envfile, "a") as file:
+            envfile_content = "export LD_PRELOAD" + agent_path + '"\n'
+            if agent_version < 1.133 or agent_version == None:
+                _log.info("Setting DT_HOST_ID")
+                envfile_content += 'export DT_HOST_ID=' + app_name + '_${CF_INSTANCE_INDEX}'
             file.write(ld_preload + host_name)
 
 # Extension Methods
