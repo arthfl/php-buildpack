@@ -51,6 +51,10 @@ describe 'Deploy app with single dynatrace service without manifest.json' do
      expect(@app).to have_logged 'Adding Dynatrace LD_PRELOAD settings'
     end
 
+    it 'setting DT_HOST_ID' do
+     expect(@app).to have_logged 'Setting DT_HOST_ID'
+    end
+
     it 'checking for manifest.json fallback' do
      expect(@app).to have_logged 'Agent path not found in manifest.json, using fallback'
     end
@@ -105,6 +109,10 @@ describe 'Deploy app with single dynatrace service and manifest.json' do
 
     it 'LD_PRELOAD settings' do
      expect(@app).to have_logged 'Adding Dynatrace LD_PRELOAD settings'
+    end
+
+    it 'not setting DT_HOST_ID' do
+     expect(@app).to_not have_logged 'Setting DT_HOST_ID'
     end
 
     it 'using manifest.json' do
