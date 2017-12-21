@@ -173,7 +173,7 @@ class DynatraceInstaller(object):
         agent_path = os.path.join(self._ctx['HOME'], 'app', 'dynatrace', 'oneagent', agent_path)
 
         with open(envfile, "a") as file:
-            envfile_content = "export LD_PRELOAD" + agent_path + '"\n'
+            envfile_content = "export LD_PRELOAD=" + agent_path + '\n'
             if agent_version < 1.133 or agent_version == None:
                 _log.info("Setting DT_HOST_ID")
                 envfile_content += 'export DT_HOST_ID=' + app_name + '_${CF_INSTANCE_INDEX}'
