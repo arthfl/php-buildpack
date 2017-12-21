@@ -177,7 +177,7 @@ class DynatraceInstaller(object):
             if agent_version < 1.133 or agent_version == None:
                 _log.info("Setting DT_HOST_ID")
                 envfile_content += 'export DT_HOST_ID=' + app_name + '_${CF_INSTANCE_INDEX}'
-            file.write(ld_preload + host_name)
+            file.write(envfile_content)
 
 # Extension Methods
 def compile(install):
